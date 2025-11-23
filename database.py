@@ -111,68 +111,72 @@ def inicializar_datos():
     """Inicializar datos de ejemplo"""
     session = get_session()
     
-    # Verificar si ya existen datos
-    if session.query(Equipo).count() == 0:
-        # Crear equipos de ejemplo
-        equipos = [
-            Equipo(
-                codigo=f"EQ-{i:05d}",
-                nombre=nombre,
-                descripcion=descripcion,
-                ubicacion=ubicacion,
-                estado=estado
-            ) for i, (nombre, descripcion, ubicacion, estado) in enumerate([
-                ("Compresor Principal A-125", "Compresor de aire de 100HP", "Sala de Máquinas 1", "Operativo"),
-                ("Motor B-42", "Motor eléctrico 50HP", "Línea de Producción 2", "Operativo"),
-                ("Transportador C-8", "Banda transportadora 20m", "Área de Empaque", "En Mantenimiento"),
-                ("Bomba Hidráulica D-15", "Bomba de aceite 25HP", "Sala de Máquinas 2", "Operativo"),
-                ("Ventilador E-22", "Ventilador industrial", "Área de Proceso", "Parado")
-            ], 1)
-        ]
-        
-        session.add_all(equipos)
-        session.commit()
-        
-        # Crear órdenes de trabajo de ejemplo
-        ordenes = [
-            OrdenTrabajo(
-                codigo=f"OT-{i:05d}",
-                descripcion=descripcion,
-                tipo=tipo,
-                prioridad=prioridad,
-                estado=estado,
-                equipo_id=equipo_id,
-                tecnico_asignado=tecnico,
-                fecha_inicio_plan=datetime.now() - timedelta(days=2),
-                fecha_fin_plan=datetime.now() + timedelta(days=5),
-                horas_estimadas=horas
-            ) for i, (descripcion, tipo, prioridad, estado, equipo_id, tecnico, horas) in enumerate([
-                ("Revisión mensual compresor principal", "Preventivo", "Media", "En Progreso", 1, "Juan Pérez", 4.0),
-                ("Cambio de rodamientos motor B", "Correctivo", "Alta", "Pendiente", 2, "María García", 8.0),
-                ("Lubricación cadena transportadora", "Preventivo", "Baja", "Completada", 3, "Carlos López", 2.0),
-                ("Reparación fuga de aceite", "Correctivo", "Alta", "Pendiente", 4, "Ana Martínez", 6.0)
-            ], 1)
-        ]
-        
-        session.add_all(ordenes)
-        
-        # Crear avisos de ejemplo
-        avisos = [
-            AvisoAveria(
-                codigo=f"AV-{i:05d}",
-                descripcion=descripcion,
-                reportado_por=reportado_por,
-                prioridad=prioridad,
-                estado=estado,
-                equipo_id=equipo_id
-            ) for i, (descripcion, reportado_por, prioridad, estado, equipo_id) in enumerate([
-                ("Fuga de aceite en válvula principal", "Operario 1", "Alta", "Reportado", 1),
-                ("Fallo en arranque motor auxiliar", "Supervisor", "Crítica", "En Análisis", 2),
-                ("Ruido anormal en transportador", "Técnico", "Media", "Resuelto", 3)
-            ], 1)
-        ]
-        
-        session.add_all(avisos)
-        session.commit()
-    
-    session.close()
+    try:
+        # Verificar si ya existen datos
+        if session.query(Equipo).count() == 0:
+            # Crear equipos de ejemplo
+            equipos = [
+                Equipo(
+                    codigo=f"EQ-{i:05d}",
+                    nombre=nombre,
+                    descripcion=descripcion,
+                    ubicacion=ubicacion,
+                    estado=estado
+                ) for i, (nombre, descripcion, ubicacion, estado) in enumerate([
+                    ("Compresor Principal A-125", "Compresor de aire de 100HP", "Sala de Máquinas 1", "Operativo"),
+                    ("Motor B-42", "Motor eléctrico 50HP", "Línea de Producción 2", "Operativo"),
+                    ("Transportador C-8", "Banda transportadora 20m", "Área de Empaque", "En Mantenimiento"),
+                    ("Bomba Hidráulica D-15", "Bomba de aceite 25HP", "Sala de Máquinas 2", "Operativo"),
+                    ("Ventilador E-22", "Ventilador industrial", "Área de Proceso", "Parado")
+                ], 1)
+            ]
+            
+            session.add_all(equipos)
+            session.commit()
+            
+            # Crear órdenes de trabajo de ejemplo
+            ordenes = [
+                OrdenTrabajo(
+                    codigo=f"OT-{i:05d}",
+                    descripcion=descripcion,
+                    tipo=tipo,
+                    prioridad=prioridad,
+                    estado=estado,
+                    equipo_id=equipo_id,
+                    tecnico_asignado=tecnico,
+                    fecha_inicio_plan=datetime.now() - timedelta(days=2),
+                    fecha_fin_plan=datetime.now() + timedelta(days=5),
+                    horas_estimadas=horas
+                ) for i, (descripcion, tipo, prioridad, estado, equipo_id, tecnico, horas) in enumerate([
+                    ("Revisión mensual compresor principal", "Preventivo", "Media", "En Progreso", 1, "Juan Pérez", 4.0),
+                    ("Cambio de rodamientos motor B", "Correctivo", "Alta", "Pendiente", 2, "María García", 8.0),
+                    ("Lubricación cadena transportadora", "Preventivo", "Baja", "Completada", 3, "Carlos López", 2.0),
+                    ("Reparación fuga de aceite", "Correctivo", "Alta", "Pendiente", 4, "Ana Martínez", 6.0)
+                ], 1)
+            ]
+            
+            session.add_all(ordenes)
+            
+            # Crear avisos de ejemplo
+            avisos = [
+                AvisoAveria(
+                    codigo=f"AV-{i:05d}",
+                    descripcion=descripcion,
+                    reportado_por=reportado_por,
+                    prioridad=prioridad,
+                    estado=estado,
+                    equipo_id=equipo_id
+                ) for i, (descripcion, reportado_por, prioridad, estado, equipo_id) in enumerate([
+                    ("Fuga de aceite en válvula principal", "Operario 1", "Alta", "Reportado", 1),
+                    ("Fallo en arranque motor auxiliar", "Supervisor", "Crítica", "En Análisis", 2),
+                    ("Ruido anormal en transportador", "Técnico", "Media", "Resuelto", 3)
+                ], 1)
+            ]
+            
+            session.add_all(avisos)
+            session.commit()
+    except Exception as e:
+        print(f"Error inicializando datos: {e}")
+        session.rollback()
+    finally:
+        session.close()
